@@ -31,4 +31,4 @@ You can try out the application at: [https://ali-shabani.github.io/vibe-todo/](h
 
 ## Deployment
 
-This application is deployed via GitHub Pages using GitHub Actions. The deployment workflow automatically deploys the latest changes from the 'vibe' branch.
+This application is deployed via GitHub Pages using GitHub Actions. The deployment workflow automatically deploys the latest changes from the 'main' branch.

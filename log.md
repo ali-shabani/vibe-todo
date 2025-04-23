@@ -38,6 +38,17 @@
 **Changes:**
 
 - Set up GitHub Actions workflow for deployment
-- Configured GitHub Pages deployment from the 'vibe' branch
+- Configured GitHub Pages deployment from the 'main' branch
 - Updated README with live demo link
-- Made the app publicly accessible at https://ali-shabani.github.io/todo-evolution/
+- Made the app publicly accessible at https://ali-shabani.github.io/vibe-todo/
+
+## Entry 4 - Repository Migration
+
+**Date:** 2025-04-23
+**Time Spent:** 5 minutes
+**Changes:**
+
+- Migrated from 'todo-evolution' repository to 'vibe-todo'
+- Updated all references to reflect the new repository name
+- Changed deployment branch from 'vibe' to 'main'
+- Fixed GitHub Pages workflow configuration

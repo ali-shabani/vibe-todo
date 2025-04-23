@@ -1,10 +1,10 @@
-# Todo Evolution Project Rules and Progress
+# Vibe Todo Project Rules and Progress
 
 **IMPORTANT**: This file must be updated after each prompt/change to keep the context of the LLM assistant synced with the project. Each update should include what was accomplished and any new requirements.
 
 ## Project Description
 
-Todo Evolution is a vanilla JavaScript todo application that allows users to create, edit, delete, and mark tasks as complete. The app uses local storage for data persistence and includes accessibility features.
+Vibe Todo is a vanilla JavaScript todo application that allows users to create, edit, delete, and mark tasks as complete. The app uses local storage for data persistence and includes accessibility features.
 
 ## Current Features
 
@@ -51,14 +51,21 @@ Todo Evolution is a vanilla JavaScript todo application that allows users to cre
    - Fixed issues identified in PR review
 
 3. **GitHub Pages Deployment** (April 23, 2025, 5 minutes):
+
    - Set up GitHub Actions workflow for deployment
-   - Configured GitHub Pages for the 'vibe' branch
-   - Made the app publicly accessible at https://ali-shabani.github.io/todo-evolution/
+   - Configured GitHub Pages for the 'main' branch
+   - Made the app publicly accessible at https://ali-shabani.github.io/vibe-todo/
+
+4. **Repository Migration** (April 23, 2025, 5 minutes):
+   - Migrated from 'todo-evolution' repository to 'vibe-todo'
+   - Updated all references to the new repository name
+   - Changed deployment branch from 'vibe' to 'main'
+   - Ensured GitHub Pages workflow properly configured
 
 ## Current Working Branch
 
-- Branch: vibe
-- Deployment: The app is deployed via GitHub Pages at https://ali-shabani.github.io/todo-evolution/
+- Branch: main
+- Deployment: The app is deployed via GitHub Pages at https://ali-shabani.github.io/vibe-todo/
 
 ## Next Steps
 
