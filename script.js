@@ -268,17 +268,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const todoText = document.createElement("span");
       todoText.className = "todo-text" + (todo.completed ? " completed" : "");
       todoText.textContent = todo.text;
+      todoText.setAttribute("title", "Click to edit");
+      todoText.addEventListener("click", () => {
+        editTodo(todo.id);
+      });
 
       const actionsDiv = document.createElement("div");
       actionsDiv.className = "actions";
-
-      const editBtn = document.createElement("button");
-      editBtn.className = "edit-btn";
-      editBtn.textContent = "Edit";
-      editBtn.setAttribute("aria-label", "Edit " + todo.text);
-      editBtn.addEventListener("click", () => {
-        editTodo(todo.id);
-      });
 
       const deleteBtn = document.createElement("button");
       deleteBtn.className = "delete-btn";
@@ -288,7 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteTodo(todo.id);
       });
 
-      actionsDiv.appendChild(editBtn);
       actionsDiv.appendChild(deleteBtn);
 
       // Add elements to todo content
@@ -304,6 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!todo.description) {
         todoDesc.classList.add("todo-description-empty");
       }
+      todoDesc.setAttribute("title", "Click to edit");
+      todoDesc.addEventListener("click", () => {
+        editTodo(todo.id);
+      });
       todoItem.appendChild(todoDesc);
 
       todoList.appendChild(todoItem);

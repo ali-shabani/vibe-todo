@@ -115,3 +115,15 @@
 - Improved accessibility of completion controls
 - Added keyboard support for todo completion
 - Made todo status more discoverable for users
+
+## Entry 10 - Improved Editing UX
+
+**Date:** 2025-04-24
+**Time Spent:** 10 minutes
+**Changes:**
+
+- Made todo titles and descriptions directly editable on click
+- Removed the separate edit button for cleaner UI
+- Added visual cues (hover effects and tooltips) to indicate editability
+- Improved intuitiveness of the editing workflow
+- Reduced the number of clicks needed to edit a todo

@@ -24,7 +24,7 @@ You can try out the application at: [https://ali-shabani.github.io/vibe-todo/](h
 4. Click "Add" or press Enter to create the todo
 5. Click the checkbox to mark a todo as complete/incomplete
 6. Use the tabs to filter between All, Active, and Completed todos
-7. Use the Edit button to modify a todo and its description
+7. Click directly on a todo title or description to edit it
 8. Use Ctrl+Enter to save while editing descriptions
 9. Use the Delete button to remove a todo
 
