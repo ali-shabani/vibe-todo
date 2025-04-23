@@ -102,13 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
     editInput.className = "edit-input";
     editInput.setAttribute("aria-label", "Edit todo title");
 
-    // Create edit input for description
-    const editDescInput = document.createElement("input");
-    editDescInput.type = "text";
-    editDescInput.value = currentDescription;
-    editDescInput.className = "edit-input";
-    editDescInput.setAttribute("aria-label", "Edit todo description");
-    editDescInput.placeholder = "Description (optional)";
+    // Create edit textarea for description
+    const editDescTextarea = document.createElement("textarea");
+    editDescTextarea.value = currentDescription;
+    editDescTextarea.className = "edit-textarea";
+    editDescTextarea.setAttribute("aria-label", "Edit todo description");
+    editDescTextarea.placeholder = "Description (optional)";
+    editDescTextarea.rows = 4;
 
     // Create save button
     const saveBtn = document.createElement("button");
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Append new elements
     editContainer.appendChild(editInput);
-    editContainer.appendChild(editDescInput);
+    editContainer.appendChild(editDescTextarea);
     editContainer.appendChild(buttonsContainer);
     todoItem.appendChild(editContainer);
 
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Save event
     saveBtn.addEventListener("click", () => {
-      saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
+      saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
     });
 
     // Cancel event
@@ -150,17 +150,17 @@ document.addEventListener("DOMContentLoaded", () => {
       cancelEdit();
     });
 
-    // Save on Enter key
-    editInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
+    // Save on Enter key with Ctrl for the main input
+    editInput.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key === "Enter") {
+        saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });
 
-    // Save on Enter key for description too
-    editDescInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
+    // Save on Enter key with Ctrl for textarea
+    editDescTextarea.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key === "Enter") {
+        saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });
   }
@@ -253,13 +253,14 @@ document.addEventListener("DOMContentLoaded", () => {
       todoContent.appendChild(actionsDiv);
       todoItem.appendChild(todoContent);
 
-      // Add description if it exists
-      if (todo.description) {
-        const todoDesc = document.createElement("div");
-        todoDesc.className = "todo-description";
-        todoDesc.textContent = todo.description;
-        todoItem.appendChild(todoDesc);
+      // Always add description container, even if empty
+      const todoDesc = document.createElement("div");
+      todoDesc.className = "todo-description";
+      todoDesc.textContent = todo.description || "No description provided";
+      if (!todo.description) {
+        todoDesc.classList.add("todo-description-empty");
       }
+      todoItem.appendChild(todoDesc);
 
       todoList.appendChild(todoItem);
     });
