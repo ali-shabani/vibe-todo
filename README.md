@@ -26,6 +26,16 @@ You can try out the application at: [https://ali-shabani.github.io/vibe-todo/](h
 7. Use Ctrl+Enter to save while editing descriptions
 8. Use the Delete button to remove a todo
 
+## Development
+
+To run the project with a development server with live reloading:
+
+1. Make sure you have Node.js installed
+2. Install dependencies with `npm install`
+3. Run the development server with `npm run dev`
+4. Open your browser to http://localhost:3000
+5. Any changes to HTML, CSS, or JavaScript files will automatically reload the page
+
 ## Implementation Details
 
 - Pure vanilla JavaScript - no frameworks or libraries
