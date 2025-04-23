@@ -5,6 +5,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const todoList = document.getElementById("todoList");
   const tabs = document.querySelectorAll(".tab");
 
+  // Batch action elements
+  const batchActionsToolbar = document.getElementById("batchActionsToolbar");
+  const selectedCountElement = document.getElementById("selectedCount");
+  const batchCompleteBtn = document.getElementById("batchComplete");
+  const batchUncompleteBtn = document.getElementById("batchUncomplete");
+  const batchDeleteBtn = document.getElementById("batchDelete");
+  const cancelBatchSelectionBtn = document.getElementById(
+    "cancelBatchSelection"
+  );
+  const toggleSelectionModeBtn = document.getElementById("toggleSelectionMode");
+  const selectAllCheckbox = document.getElementById("selectAll");
+
   // Current filter
   let currentFilter = "all";
 
@@ -13,6 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Selected todo for detail view
   let selectedTodoId = null;
+
+  // Selection mode state
+  let selectionMode = false;
+
+  // Selected todo IDs for batch actions
+  let selectedTodoIds = [];
 
   // Load todos from localStorage
   let todos = [];
@@ -57,6 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update current filter
       currentFilter = tab.dataset.filter;
 
+      // Cancel batch selection when changing tabs
+      if (selectionMode) {
+        cancelBatchSelection();
+      }
+
       // Switch back to list view when changing tabs
       if (currentView === "detail") {
         switchToListView();
@@ -85,6 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
       addTodo();
     }
   });
+
+  // Batch action event listeners
+  toggleSelectionModeBtn.addEventListener("click", toggleSelectionMode);
+  selectAllCheckbox.addEventListener("change", handleSelectAll);
+  batchCompleteBtn.addEventListener("click", completeBatchTodos);
+  batchUncompleteBtn.addEventListener("click", uncompleteBatchTodos);
+  batchDeleteBtn.addEventListener("click", deleteBatchTodos);
+  cancelBatchSelectionBtn.addEventListener("click", cancelBatchSelection);
 
   // Function to add a new todo
   function addTodo() {
@@ -381,6 +412,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function switchToListView() {
     currentView = "list";
     selectedTodoId = null;
+
+    // Exit selection mode if active
+    if (selectionMode) {
+      toggleSelectionMode();
+    }
+
     renderTodos();
   }
 
@@ -542,6 +579,14 @@ document.addEventListener("DOMContentLoaded", () => {
       filteredTodos = todos.filter((todo) => !todo.isDeleted);
     }
 
+    // Hide/show the selection UI based on current filter and selection mode
+    const todoListHeader = document.querySelector(".todo-list-header");
+    if (currentFilter === "deleted") {
+      todoListHeader.style.display = "none";
+    } else {
+      todoListHeader.style.display = "flex";
+    }
+
     // Show empty state if no todos match the filter
     if (filteredTodos.length === 0) {
       const emptyState = document.createElement("div");
@@ -587,37 +632,82 @@ document.addEventListener("DOMContentLoaded", () => {
       todoItem.className = "todo-item";
       todoItem.dataset.id = todo.id;
 
+      // Add selected class if this todo is in the selectedTodoIds array
+      if (selectedTodoIds.includes(todo.id)) {
+        todoItem.classList.add("selected");
+      }
+
+      // Make the entire todo item clickable for selection in selection mode
+      todoItem.addEventListener("click", (e) => {
+        // Only handle selection if in selection mode and not clicking on a button
+        if (selectionMode && e.target.tagName !== "BUTTON") {
+          const checkbox = todoItem.querySelector(".todo-select");
+          checkbox.checked = !checkbox.checked;
+
+          // Manually trigger the change event on the checkbox
+          const event = new Event("change");
+          checkbox.dispatchEvent(event);
+
+          // Prevent other click events
+          e.stopPropagation();
+        }
+      });
+
+      // Add selection checkbox for batch actions (only visible in selection mode)
+      const todoSelect = document.createElement("input");
+      todoSelect.type = "checkbox";
+      todoSelect.className = "todo-select";
+      todoSelect.id = `select-${todo.id}`;
+      todoSelect.checked = selectedTodoIds.includes(todo.id);
+      todoSelect.addEventListener("change", () => {
+        handleTodoSelection(todo.id, todoSelect);
+      });
+      todoItem.appendChild(todoSelect);
+
+      // Add selection checkbox display element (only visible in selection mode)
+      const todoSelectCheckbox = document.createElement("span");
+      todoSelectCheckbox.className = "todo-select-checkbox";
+      todoSelectCheckbox.setAttribute("role", "checkbox");
+      todoSelectCheckbox.setAttribute(
+        "aria-checked",
+        todoSelect.checked ? "true" : "false"
+      );
+      todoSelectCheckbox.setAttribute("aria-labelledby", `select-${todo.id}`);
+      todoItem.appendChild(todoSelectCheckbox);
+
       // Create todo content container
       const todoContent = document.createElement("div");
       todoContent.className = "todo-content";
 
-      // Create checkbox for completion
-      const todoCheckbox = document.createElement("div");
-      todoCheckbox.className =
-        "todo-checkbox" + (todo.completed ? " checked" : "");
-      todoCheckbox.setAttribute("role", "checkbox");
-      todoCheckbox.setAttribute(
-        "aria-checked",
-        todo.completed ? "true" : "false"
-      );
-      todoCheckbox.setAttribute("tabindex", "0");
-      todoCheckbox.setAttribute(
+      // Create completion circle button (replacing checkbox)
+      const completeBtn = document.createElement("button");
+      completeBtn.className =
+        "complete-circle" + (todo.completed ? " completed" : "");
+      completeBtn.setAttribute(
         "aria-label",
         "Mark as " + (todo.completed ? "incomplete" : "complete")
       );
+      completeBtn.setAttribute(
+        "title",
+        "Mark as " + (todo.completed ? "incomplete" : "complete")
+      );
 
-      todoCheckbox.addEventListener("click", () => {
+      // Inner check icon (only visible when completed)
+      completeBtn.innerHTML = `
+        <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"></path>
+        </svg>
+      `;
+
+      completeBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent triggering edit
         toggleCompleted(todo.id);
       });
 
-      // Keyboard support for checkbox
-      todoCheckbox.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggleCompleted(todo.id);
-        }
-      });
+      // Add completion button to content
+      todoContent.appendChild(completeBtn);
 
+      // Add todo text
       const todoText = document.createElement("span");
       todoText.className = "todo-text" + (todo.completed ? " completed" : "");
       todoText.textContent = todo.text;
@@ -625,6 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
       todoText.addEventListener("click", () => {
         editTodo(todo.id);
       });
+      todoContent.appendChild(todoText);
 
       // Actions div - different actions based on whether todo is in trash or not
       const actionsDiv = document.createElement("div");
@@ -641,7 +732,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       historyBtn.setAttribute("aria-label", "View history");
       historyBtn.setAttribute("title", "View history");
-      historyBtn.addEventListener("click", () => {
+      historyBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent triggering edit
         viewTodoDetails(todo.id);
       });
       actionsDiv.appendChild(historyBtn);
@@ -658,7 +750,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         restoreBtn.setAttribute("aria-label", "Restore todo");
         restoreBtn.setAttribute("title", "Restore todo");
-        restoreBtn.addEventListener("click", () => {
+        restoreBtn.addEventListener("click", (e) => {
+          e.stopPropagation(); // Prevent triggering edit
           restoreTodo(todo.id);
         });
 
@@ -674,7 +767,8 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         permDeleteBtn.setAttribute("aria-label", "Permanently delete todo");
         permDeleteBtn.setAttribute("title", "Permanently delete");
-        permDeleteBtn.addEventListener("click", () => {
+        permDeleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation(); // Prevent triggering edit
           permanentlyDeleteTodo(todo.id);
         });
 
@@ -691,16 +785,15 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         deleteBtn.setAttribute("aria-label", "Delete " + todo.text);
         deleteBtn.setAttribute("title", "Move to trash");
-        deleteBtn.addEventListener("click", () => {
+        deleteBtn.addEventListener("click", (e) => {
+          e.stopPropagation(); // Prevent triggering edit
           softDeleteTodo(todo.id);
         });
 
         actionsDiv.appendChild(deleteBtn);
       }
 
-      // Add elements to todo content
-      todoContent.appendChild(todoCheckbox);
-      todoContent.appendChild(todoText);
+      // Add actions to todo content
       todoContent.appendChild(actionsDiv);
       todoItem.appendChild(todoContent);
 
@@ -718,6 +811,217 @@ document.addEventListener("DOMContentLoaded", () => {
       todoItem.appendChild(todoDesc);
 
       todoList.appendChild(todoItem);
+    });
+  }
+
+  // Batch action functions
+
+  // Toggle selection mode
+  function toggleSelectionMode() {
+    selectionMode = !selectionMode;
+
+    // Update UI to reflect selection mode
+    const todoListContainer = document.querySelector(".container");
+
+    if (selectionMode) {
+      // Enter selection mode
+      todoListContainer.classList.add("selection-mode");
+      toggleSelectionModeBtn.classList.add("active");
+      toggleSelectionModeBtn.querySelector("span").textContent = "Cancel";
+
+      // Make selection checkboxes visible
+      document.querySelectorAll(".todo-select-checkbox").forEach((checkbox) => {
+        checkbox.style.display = "block";
+      });
+
+      // Adjust content padding and hide completion circles
+      document.querySelectorAll(".todo-content").forEach((content) => {
+        content.style.paddingLeft = "30px";
+      });
+
+      document.querySelectorAll(".todo-description").forEach((desc) => {
+        desc.style.paddingLeft = "30px";
+      });
+    } else {
+      // Exit selection mode
+      todoListContainer.classList.remove("selection-mode");
+      toggleSelectionModeBtn.classList.remove("active");
+      toggleSelectionModeBtn.querySelector("span").textContent = "Select";
+
+      // Hide selection checkboxes
+      document.querySelectorAll(".todo-select-checkbox").forEach((checkbox) => {
+        checkbox.style.display = "none";
+      });
+
+      // Reset padding
+      document.querySelectorAll(".todo-content").forEach((content) => {
+        content.style.paddingLeft = "";
+      });
+
+      document.querySelectorAll(".todo-description").forEach((desc) => {
+        desc.style.paddingLeft = "";
+      });
+
+      // Clear selection when exiting selection mode
+      cancelBatchSelection();
+    }
+
+    renderTodos(); // Re-render todos to properly update the UI
+  }
+
+  // Handle selection of a todo item
+  function handleTodoSelection(id, checkbox) {
+    if (!selectionMode) return;
+
+    if (checkbox.checked) {
+      // Add to selected IDs if not already included
+      if (!selectedTodoIds.includes(id)) {
+        selectedTodoIds.push(id);
+      }
+    } else {
+      // Remove from selected IDs
+      selectedTodoIds = selectedTodoIds.filter((todoId) => todoId !== id);
+    }
+
+    updateBatchActionsUI();
+  }
+
+  // Handle select all checkbox
+  function handleSelectAll() {
+    if (selectAllCheckbox.checked) {
+      // Get all visible todos based on current filter
+      let visibleTodos = [];
+      if (currentFilter === "active") {
+        visibleTodos = todos.filter(
+          (todo) => !todo.completed && !todo.isDeleted
+        );
+      } else if (currentFilter === "completed") {
+        visibleTodos = todos.filter(
+          (todo) => todo.completed && !todo.isDeleted
+        );
+      } else if (currentFilter === "deleted") {
+        visibleTodos = todos.filter((todo) => todo.isDeleted);
+      } else {
+        visibleTodos = todos.filter((todo) => !todo.isDeleted);
+      }
+
+      // Select all visible todos
+      selectedTodoIds = visibleTodos.map((todo) => todo.id);
+
+      // Update all checkboxes
+      document.querySelectorAll(".todo-select").forEach((checkbox) => {
+        checkbox.checked = true;
+      });
+    } else {
+      // Deselect all
+      selectedTodoIds = [];
+
+      // Update all checkboxes
+      document.querySelectorAll(".todo-select").forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+    }
+
+    updateBatchActionsUI();
+  }
+
+  // Update batch actions UI based on selection
+  function updateBatchActionsUI() {
+    const selectedCount = selectedTodoIds.length;
+
+    if (selectedCount > 0) {
+      batchActionsToolbar.classList.remove("hidden");
+      selectedCountElement.textContent = selectedCount;
+
+      // Update todo items to show selection
+      document.querySelectorAll(".todo-item").forEach((item) => {
+        const id = parseInt(item.dataset.id);
+        if (selectedTodoIds.includes(id)) {
+          item.classList.add("selected");
+        } else {
+          item.classList.remove("selected");
+        }
+      });
+    } else {
+      batchActionsToolbar.classList.add("hidden");
+      document.querySelectorAll(".todo-item").forEach((item) => {
+        item.classList.remove("selected");
+      });
+    }
+  }
+
+  // Complete all selected todos
+  function completeBatchTodos() {
+    if (selectedTodoIds.length === 0) return;
+
+    todos = todos.map((todo) => {
+      if (selectedTodoIds.includes(todo.id) && !todo.completed) {
+        // Log the completion action
+        logAction(
+          todo.id,
+          "completed",
+          "Todo was marked as complete (batch action)"
+        );
+        return { ...todo, completed: true };
+      }
+      return todo;
+    });
+
+    saveTodos();
+    cancelBatchSelection();
+    renderTodos();
+  }
+
+  // Uncomplete all selected todos
+  function uncompleteBatchTodos() {
+    if (selectedTodoIds.length === 0) return;
+
+    todos = todos.map((todo) => {
+      if (selectedTodoIds.includes(todo.id) && todo.completed) {
+        // Log the uncompletion action
+        logAction(
+          todo.id,
+          "uncompleted",
+          "Todo was marked as incomplete (batch action)"
+        );
+        return { ...todo, completed: false };
+      }
+      return todo;
+    });
+
+    saveTodos();
+    cancelBatchSelection();
+    renderTodos();
+  }
+
+  // Delete all selected todos
+  function deleteBatchTodos() {
+    if (selectedTodoIds.length === 0) return;
+
+    todos = todos.map((todo) => {
+      if (selectedTodoIds.includes(todo.id) && !todo.isDeleted) {
+        // Log the deletion action
+        logAction(todo.id, "deleted", "Todo was moved to trash (batch action)");
+        return { ...todo, isDeleted: true };
+      }
+      return todo;
+    });
+
+    saveTodos();
+    cancelBatchSelection();
+    renderTodos();
+  }
+
+  // Cancel batch selection
+  function cancelBatchSelection() {
+    selectedTodoIds = [];
+    selectAllCheckbox.checked = false;
+    batchActionsToolbar.classList.add("hidden");
+    document.querySelectorAll(".todo-item").forEach((item) => {
+      item.classList.remove("selected");
+    });
+    document.querySelectorAll(".todo-select").forEach((checkbox) => {
+      checkbox.checked = false;
     });
   }
 });
