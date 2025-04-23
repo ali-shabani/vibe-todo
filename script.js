@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const todoInput = document.getElementById("todoInput");
+  const todoDescription = document.getElementById("todoDescription");
   const addBtn = document.getElementById("addBtn");
   const todoList = document.getElementById("todoList");
 
@@ -7,6 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let todos = [];
   try {
     todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+    // Add empty description to existing todos if they don't have one
+    todos = todos.map((todo) => {
+      if (!todo.hasOwnProperty("description")) {
+        return { ...todo, description: "" };
+      }
+      return todo;
+    });
+
+    saveTodos(); // Save back with the new property
   } catch (e) {
     console.error("Error loading from localStorage", e);
   }
@@ -25,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to add a new todo
   function addTodo() {
     const todoText = todoInput.value.trim();
+    const description = todoDescription.value.trim();
 
     if (todoText === "") {
       alert("Please enter a task.");
@@ -34,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const todo = {
       id: Date.now(),
       text: todoText,
+      description: description,
       completed: false,
     };
 
@@ -42,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTodos();
 
     todoInput.value = "";
+    todoDescription.value = "";
     todoInput.focus();
   }
 
@@ -67,17 +81,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to edit a todo
   function editTodo(id) {
     const todoItem = document.querySelector(`[data-id="${id}"]`);
-    const todoText = todoItem.querySelector(".todo-text");
-    const actionsDiv = todoItem.querySelector(".actions");
+    const todoContent = todoItem.querySelector(".todo-content");
+    const todoText = todoContent.querySelector(".todo-text");
+    const todoDescription = todoItem.querySelector(".todo-description");
+    const actionsDiv = todoContent.querySelector(".actions");
 
     const currentText = todoText.textContent;
+    const currentDescription = todoDescription
+      ? todoDescription.textContent
+      : "";
 
-    // Create edit input
+    // Create edit container
+    const editContainer = document.createElement("div");
+    editContainer.className = "edit-container";
+
+    // Create edit input for text
     const editInput = document.createElement("input");
     editInput.type = "text";
     editInput.value = currentText;
     editInput.className = "edit-input";
-    editInput.setAttribute("aria-label", "Edit todo item");
+    editInput.setAttribute("aria-label", "Edit todo title");
+
+    // Create edit input for description
+    const editDescInput = document.createElement("input");
+    editDescInput.type = "text";
+    editDescInput.value = currentDescription;
+    editDescInput.className = "edit-input";
+    editDescInput.setAttribute("aria-label", "Edit todo description");
+    editDescInput.placeholder = "Description (optional)";
 
     // Create save button
     const saveBtn = document.createElement("button");
@@ -92,20 +123,26 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelBtn.setAttribute("aria-label", "Cancel editing");
 
     // Clear existing content
-    todoText.textContent = "";
-    actionsDiv.innerHTML = "";
+    todoItem.innerHTML = "";
+
+    // Create buttons container
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.className = "actions";
+    buttonsContainer.appendChild(saveBtn);
+    buttonsContainer.appendChild(cancelBtn);
 
     // Append new elements
-    todoText.appendChild(editInput);
-    actionsDiv.appendChild(saveBtn);
-    actionsDiv.appendChild(cancelBtn);
+    editContainer.appendChild(editInput);
+    editContainer.appendChild(editDescInput);
+    editContainer.appendChild(buttonsContainer);
+    todoItem.appendChild(editContainer);
 
     // Focus input
     editInput.focus();
 
     // Save event
     saveBtn.addEventListener("click", () => {
-      saveTodoEdit(id, editInput.value.trim());
+      saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
     });
 
     // Cancel event
@@ -116,18 +153,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save on Enter key
     editInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
-        saveTodoEdit(id, editInput.value.trim());
+        saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
       }
+    });
 
-      // Cancel on Escape key
-      if (e.key === "Escape") {
-        cancelEdit();
+    // Save on Enter key for description too
+    editDescInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        saveTodoEdit(id, editInput.value.trim(), editDescInput.value.trim());
       }
     });
   }
 
   // Function to save edited todo
-  function saveTodoEdit(id, newText) {
+  function saveTodoEdit(id, newText, newDescription) {
     if (newText === "") {
       alert("Task cannot be empty.");
       return;
@@ -135,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     todos = todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, text: newText };
+        return { ...todo, text: newText, description: newDescription };
       }
       return todo;
     });
@@ -167,6 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const todoItem = document.createElement("li");
       todoItem.className = "todo-item";
       todoItem.dataset.id = todo.id;
+
+      // Create todo content container
+      const todoContent = document.createElement("div");
+      todoContent.className = "todo-content";
 
       const todoText = document.createElement("span");
       todoText.className = "todo-text" + (todo.completed ? " completed" : "");
@@ -205,8 +248,18 @@ document.addEventListener("DOMContentLoaded", () => {
       actionsDiv.appendChild(editBtn);
       actionsDiv.appendChild(deleteBtn);
 
-      todoItem.appendChild(todoText);
-      todoItem.appendChild(actionsDiv);
+      // Add elements to todo content
+      todoContent.appendChild(todoText);
+      todoContent.appendChild(actionsDiv);
+      todoItem.appendChild(todoContent);
+
+      // Add description if it exists
+      if (todo.description) {
+        const todoDesc = document.createElement("div");
+        todoDesc.className = "todo-description";
+        todoDesc.textContent = todo.description;
+        todoItem.appendChild(todoDesc);
+      }
 
       todoList.appendChild(todoItem);
     });

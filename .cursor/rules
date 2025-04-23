@@ -14,6 +14,7 @@ Vibe Todo is a vanilla JavaScript todo application that allows users to create, 
    - Edit existing todos
    - Delete todos
    - Mark todos as complete/incomplete
+   - Optional descriptions for todos
 
 2. **User Experience**:
 
@@ -57,10 +58,18 @@ Vibe Todo is a vanilla JavaScript todo application that allows users to create, 
    - Made the app publicly accessible at https://ali-shabani.github.io/vibe-todo/
 
 4. **Repository Migration** (April 23, 2025, 5 minutes):
+
    - Migrated from 'todo-evolution' repository to 'vibe-todo'
    - Updated all references to the new repository name
    - Changed deployment branch from 'vibe' to 'main'
    - Ensured GitHub Pages workflow properly configured
+
+5. **Todo Descriptions** (April 23, 2025, 10 minutes):
+   - Added optional description field for todos
+   - Updated UI to show descriptions under todo items
+   - Enhanced edit functionality to allow editing descriptions
+   - Ensured backward compatibility for existing todos
+   - Improved styling for the new features
 
 ## Current Working Branch
 
