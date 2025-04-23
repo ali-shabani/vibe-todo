@@ -1,0 +1,69 @@
+# Todo Evolution Project Rules and Progress
+
+**IMPORTANT**: This file must be updated after each prompt/change to keep the context of the LLM assistant synced with the project. Each update should include what was accomplished and any new requirements.
+
+## Project Description
+
+Todo Evolution is a vanilla JavaScript todo application that allows users to create, edit, delete, and mark tasks as complete. The app uses local storage for data persistence and includes accessibility features.
+
+## Current Features
+
+1. **Core Todo Functionality**:
+
+   - Create new todos
+   - Edit existing todos
+   - Delete todos
+   - Mark todos as complete/incomplete
+
+2. **User Experience**:
+
+   - Data persistence via localStorage with error handling
+   - User feedback for empty inputs
+   - Responsive design
+
+3. **Accessibility**:
+   - ARIA attributes for screen readers
+   - Keyboard navigation support
+   - Proper semantic HTML elements
+   - Role attributes for interactive elements
+
+## Technical Details
+
+- **Tech Stack**: Vanilla JavaScript, HTML5, CSS3
+- **Data Storage**: localStorage with try-catch error handling
+- **Project Structure**:
+  - index.html - Main HTML structure with accessibility attributes
+  - style.css - Responsive styling for the application
+  - script.js - Todo functionality implementation
+  - log.md - Project development log tracking changes and time spent
+
+## Development Timeline
+
+1. **Initial Implementation** (April 23, 2025, 5 minutes):
+
+   - Created basic todo app with core functionality
+
+2. **Accessibility & Error Handling** (April 23, 2025, 10 minutes):
+
+   - Added try-catch blocks for localStorage operations
+   - Added user feedback for empty inputs
+   - Enhanced accessibility with ARIA attributes
+   - Fixed issues identified in PR review
+
+3. **GitHub Pages Deployment** (April 23, 2025, 5 minutes):
+   - Set up GitHub Actions workflow for deployment
+   - Configured GitHub Pages for the 'vibe' branch
+   - Made the app publicly accessible at https://ali-shabani.github.io/todo-evolution/
+
+## Current Working Branch
+
+- Branch: vibe
+- Deployment: The app is deployed via GitHub Pages at https://ali-shabani.github.io/todo-evolution/
+
+## Next Steps
+
+- Consider implementing additional features like:
+  - Todo categories/filtering
+  - Due dates for todos
+  - Bulk actions (delete all, mark all as complete)
+  - Drag and drop reordering
