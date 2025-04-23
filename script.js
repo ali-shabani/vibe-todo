@@ -249,6 +249,41 @@ document.addEventListener("DOMContentLoaded", () => {
       filteredTodos = todos.filter((todo) => todo.completed);
     }
 
+    // Show empty state if no todos match the filter
+    if (filteredTodos.length === 0) {
+      const emptyState = document.createElement("div");
+      emptyState.className = "empty-state";
+
+      // Different messages based on current filter
+      let emptyMessage = "No tasks yet. Add your first todo!";
+      let emptySvg = `<svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+        <path d="M8 12h8"></path>
+        <path d="M12 8v8"></path>
+      </svg>`;
+
+      if (currentFilter === "active") {
+        emptyMessage = "No active tasks. Great job!";
+        emptySvg = `<svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+        </svg>`;
+      } else if (currentFilter === "completed") {
+        emptyMessage = "No completed tasks yet. Check off some todos!";
+        emptySvg = `<svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <path d="M22 4 12 14.01l-3-3"></path>
+        </svg>`;
+      }
+
+      emptyState.innerHTML = `
+        <div class="empty-icon">${emptySvg}</div>
+        <p>${emptyMessage}</p>
+      `;
+
+      todoList.appendChild(emptyState);
+      return;
+    }
+
     filteredTodos.forEach((todo) => {
       const todoItem = document.createElement("li");
       todoItem.className = "todo-item";

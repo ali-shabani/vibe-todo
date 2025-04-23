@@ -140,3 +140,20 @@
 - Improved form submission workflow for both new and edited todos
 - Maintained backward compatibility with existing Ctrl+Enter functionality
 - Enhanced overall keyboard navigation experience
+
+## Entry 12 - UI Modernization
+
+**Date:** 2025-04-24
+**Time Spent:** 20 minutes
+**Changes:**
+
+- Completely redesigned the UI with a modern look and feel
+- Implemented a clean color palette with CSS variables for better maintainability
+- Added proper font loading with Inter font family
+- Included subtle animations and hover effects for better interactivity
+- Redesigned the tabs with a pill-style selector
+- Added empty states with helpful messages and icons
+- Enhanced overall visual hierarchy and spacing
+- Made todo items more distinct with hover animations and shadows
+- Added a logo and improved the header design
+- Ensured responsive design for all screen sizes
