@@ -157,3 +157,16 @@
 - Made todo items more distinct with hover animations and shadows
 - Added a logo and improved the header design
 - Ensured responsive design for all screen sizes
+
+## Entry 13 - Enhanced Keyboard Shortcut Indicators
+
+**Date:** 2025-04-24
+**Time Spent:** 5 minutes
+**Changes:**
+
+- Redesigned keyboard shortcut hints with modern key symbols
+- Added visual key indicators that look like actual keyboard keys
+- Replaced text descriptions with more intuitive visual representations
+- Made shortcut indicators more noticeable while keeping them subtle
+- Improved visual hierarchy in the shortcut hints
+- Enhanced overall user experience with better discoverability

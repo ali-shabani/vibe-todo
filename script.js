@@ -152,8 +152,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add a helper note for keyboard shortcuts
     const shortcutNote = document.createElement("div");
     shortcutNote.className = "shortcut-note";
-    shortcutNote.textContent =
-      "Tip: Press Enter on title or Shift+Enter on description to save";
+    shortcutNote.innerHTML = `
+      <span>Save with:</span>
+      <div class="key-combo">
+        <span class="key">↵</span>
+      </div>
+      <span>or</span>
+      <div class="key-combo">
+        <span class="key">⇧</span>
+        <span class="key">↵</span>
+      </div>
+    `;
 
     // Clear existing content
     todoItem.innerHTML = "";
