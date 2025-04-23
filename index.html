@@ -7,27 +7,31 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container" role="main">
+    <div class="container">
       <h1>Todo App</h1>
       <div class="input-container">
         <div class="inputs">
           <input
             type="text"
             id="todoInput"
-            placeholder="Add a new task..."
-            aria-label="Enter a new task"
-            required
+            placeholder="What needs to be done?"
           />
           <textarea
             id="todoDescription"
-            placeholder="Add a description (optional)"
-            aria-label="Enter an optional description"
+            placeholder="Description (optional)"
             rows="3"
           ></textarea>
         </div>
-        <button id="addBtn" aria-label="Add task">Add</button>
+        <button id="addBtn">Add</button>
       </div>
-      <ul id="todoList" aria-label="Todo list"></ul>
+
+      <div class="tabs">
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="active">Active</button>
+        <button class="tab" data-filter="completed">Completed</button>
+      </div>
+
+      <ul id="todoList"></ul>
     </div>
     <script src="script.js"></script>
   </body>

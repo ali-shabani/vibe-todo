@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const todoDescription = document.getElementById("todoDescription");
   const addBtn = document.getElementById("addBtn");
   const todoList = document.getElementById("todoList");
+  const tabs = document.querySelectorAll(".tab");
+
+  // Current filter
+  let currentFilter = "all";
 
   // Load todos from localStorage
   let todos = [];
@@ -21,6 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (e) {
     console.error("Error loading from localStorage", e);
   }
+
+  // Tab event listeners
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      // Update active tab
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      // Update current filter
+      currentFilter = tab.dataset.filter;
+
+      // Re-render todos with the new filter
+      renderTodos();
+    });
+  });
 
   // Render todos initially
   renderTodos();
@@ -202,7 +221,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTodos() {
     todoList.innerHTML = "";
 
-    todos.forEach((todo) => {
+    // Filter todos based on current tab
+    let filteredTodos = todos;
+    if (currentFilter === "active") {
+      filteredTodos = todos.filter((todo) => !todo.completed);
+    } else if (currentFilter === "completed") {
+      filteredTodos = todos.filter((todo) => todo.completed);
+    }
+
+    filteredTodos.forEach((todo) => {
       const todoItem = document.createElement("li");
       todoItem.className = "todo-item";
       todoItem.dataset.id = todo.id;
@@ -211,20 +238,36 @@ document.addEventListener("DOMContentLoaded", () => {
       const todoContent = document.createElement("div");
       todoContent.className = "todo-content";
 
+      // Create checkbox for completion
+      const todoCheckbox = document.createElement("div");
+      todoCheckbox.className =
+        "todo-checkbox" + (todo.completed ? " checked" : "");
+      todoCheckbox.setAttribute("role", "checkbox");
+      todoCheckbox.setAttribute(
+        "aria-checked",
+        todo.completed ? "true" : "false"
+      );
+      todoCheckbox.setAttribute("tabindex", "0");
+      todoCheckbox.setAttribute(
+        "aria-label",
+        "Mark as " + (todo.completed ? "incomplete" : "complete")
+      );
+
+      todoCheckbox.addEventListener("click", () => {
+        toggleCompleted(todo.id);
+      });
+
+      // Keyboard support for checkbox
+      todoCheckbox.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleCompleted(todo.id);
+        }
+      });
+
       const todoText = document.createElement("span");
       todoText.className = "todo-text" + (todo.completed ? " completed" : "");
       todoText.textContent = todo.text;
-      todoText.setAttribute(
-        "aria-label",
-        todo.text + ", mark as " + (todo.completed ? "incomplete" : "complete")
-      );
-      todoText.setAttribute("role", "checkbox");
-      todoText.setAttribute("aria-checked", todo.completed ? "true" : "false");
-      todoText.setAttribute("tabindex", "0");
-
-      todoText.addEventListener("click", () => {
-        toggleCompleted(todo.id);
-      });
 
       const actionsDiv = document.createElement("div");
       actionsDiv.className = "actions";
@@ -249,6 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
       actionsDiv.appendChild(deleteBtn);
 
       // Add elements to todo content
+      todoContent.appendChild(todoCheckbox);
       todoContent.appendChild(todoText);
       todoContent.appendChild(actionsDiv);
       todoItem.appendChild(todoContent);
