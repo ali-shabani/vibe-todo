@@ -52,6 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Add Shift+Enter support for description field
+  todoDescription.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.shiftKey) {
+      e.preventDefault(); // Prevent default behavior of textarea
+      addTodo();
+    }
+  });
+
   // Function to add a new todo
   function addTodo() {
     const todoText = todoInput.value.trim();
@@ -141,6 +149,12 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelBtn.className = "cancel-btn";
     cancelBtn.setAttribute("aria-label", "Cancel editing");
 
+    // Add a helper note for keyboard shortcuts
+    const shortcutNote = document.createElement("div");
+    shortcutNote.className = "shortcut-note";
+    shortcutNote.textContent =
+      "Tip: Press Enter on title or Shift+Enter on description to save";
+
     // Clear existing content
     todoItem.innerHTML = "";
 
@@ -153,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Append new elements
     editContainer.appendChild(editInput);
     editContainer.appendChild(editDescTextarea);
+    editContainer.appendChild(shortcutNote);
     editContainer.appendChild(buttonsContainer);
     todoItem.appendChild(editContainer);
 
@@ -169,16 +184,21 @@ document.addEventListener("DOMContentLoaded", () => {
       cancelEdit();
     });
 
-    // Save on Enter key with Ctrl for the main input
+    // Save on Enter key for the main input
     editInput.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key === "Enter") {
+      if (e.key === "Enter") {
         saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });
 
-    // Save on Enter key with Ctrl for textarea
+    // Save on Shift+Enter for textarea
     editDescTextarea.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key === "Enter") {
+      if (e.key === "Enter" && e.shiftKey) {
+        e.preventDefault(); // Prevent default behavior of textarea
+        saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
+      }
+      // Keep existing Ctrl+Enter functionality as an alternative
+      else if (e.ctrlKey && e.key === "Enter") {
         saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });

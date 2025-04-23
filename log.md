@@ -127,3 +127,16 @@
 - Added visual cues (hover effects and tooltips) to indicate editability
 - Improved intuitiveness of the editing workflow
 - Reduced the number of clicks needed to edit a todo
+
+## Entry 11 - Enhanced Keyboard Navigation
+
+**Date:** 2025-04-24
+**Time Spent:** 8 minutes
+**Changes:**
+
+- Added Enter key support for submitting forms in title fields
+- Added Shift+Enter key combination for submitting from description fields
+- Added helpful shortcut tips in the UI
+- Improved form submission workflow for both new and edited todos
+- Maintained backward compatibility with existing Ctrl+Enter functionality
+- Enhanced overall keyboard navigation experience

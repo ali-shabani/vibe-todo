@@ -21,11 +21,11 @@ You can try out the application at: [https://ali-shabani.github.io/vibe-todo/](h
 1. Simply open `index.html` in your browser
 2. Add a new todo by typing in the input field
 3. Add a detailed description in the textarea (optional)
-4. Click "Add" or press Enter to create the todo
+4. Click "Add" or press Enter in the title field or Shift+Enter in the description field to create the todo
 5. Click the checkbox to mark a todo as complete/incomplete
 6. Use the tabs to filter between All, Active, and Completed todos
 7. Click directly on a todo title or description to edit it
-8. Use Ctrl+Enter to save while editing descriptions
+8. Press Enter in the title field or Shift+Enter in the description field to save edits
 9. Use the Delete button to remove a todo
 
 ## Development
