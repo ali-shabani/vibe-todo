@@ -152,14 +152,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Save on Enter key with Ctrl for the main input
     editInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && e.ctrlKey) {
+      if (e.ctrlKey && e.key === "Enter") {
         saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });
 
     // Save on Enter key with Ctrl for textarea
     editDescTextarea.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && e.ctrlKey) {
+      if (e.ctrlKey && e.key === "Enter") {
         saveTodoEdit(id, editInput.value.trim(), editDescTextarea.value.trim());
       }
     });
@@ -258,8 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
       todoDesc.className = "todo-description";
       todoDesc.textContent = todo.description || "No description provided";
       if (!todo.description) {
-        todoDesc.style.fontStyle = "italic";
-        todoDesc.style.color = "#aaa";
+        todoDesc.classList.add("todo-description-empty");
       }
       todoItem.appendChild(todoDesc);
 

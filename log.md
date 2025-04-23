@@ -78,3 +78,14 @@
 - Added Ctrl+Enter shortcut to save while editing descriptions
 - Increased container width to better accommodate longer descriptions
 - Added visual styling to descriptions (background, padding, line-height)
+
+## Entry 7 - Code Review Improvements
+
+**Date:** 2025-04-24
+**Time Spent:** 5 minutes
+**Changes:**
+
+- Implemented code review feedback from PR #1
+- Fixed order of condition checks in event listeners for better consistency
+- Replaced inline styling with CSS classes for empty todo descriptions
+- Improved code maintainability and organization

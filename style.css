@@ -116,6 +116,11 @@ ul {
   color: #888;
 }
 
+.todo-description-empty {
+  font-style: italic;
+  color: #aaa;
+}
+
 .edit-container {
   display: flex;
   flex-direction: column;
