@@ -14,7 +14,7 @@ body {
 
 .container {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -38,10 +38,12 @@ h1 {
   flex-direction: column;
 }
 
-input {
+input,
+textarea {
   padding: 10px;
   border: 1px solid #ddd;
   font-size: 16px;
+  font-family: "Arial", sans-serif;
 }
 
 #todoInput {
@@ -51,6 +53,8 @@ input {
 
 #todoDescription {
   border-radius: 0 0 0 4px;
+  resize: vertical;
+  min-height: 60px;
 }
 
 button {
@@ -79,24 +83,32 @@ ul {
   flex-direction: column;
   padding: 10px;
   border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
 }
 
 .todo-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px;
 }
 
 .todo-text {
   flex: 1;
   padding: 5px;
+  font-weight: bold;
 }
 
 .todo-description {
   font-size: 14px;
   color: #666;
-  padding: 0 5px 5px 5px;
-  margin-top: 2px;
+  padding: 8px;
+  margin: 5px 0;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.4;
 }
 
 .completed {
@@ -118,6 +130,17 @@ ul {
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-right: 5px;
+}
+
+.edit-textarea {
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .actions {

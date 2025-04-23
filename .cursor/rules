@@ -65,15 +65,24 @@ Vibe Todo is a vanilla JavaScript todo application that allows users to create, 
    - Ensured GitHub Pages workflow properly configured
 
 5. **Todo Descriptions** (April 23, 2025, 10 minutes):
+
    - Added optional description field for todos
    - Updated UI to show descriptions under todo items
    - Enhanced edit functionality to allow editing descriptions
    - Ensured backward compatibility for existing todos
    - Improved styling for the new features
 
+6. **Improved Descriptions** (April 23, 2025, 8 minutes):
+   - Converted description input to textarea for larger inputs
+   - Enhanced description display with improved formatting
+   - Added placeholder for empty descriptions
+   - Improved editing with proper textarea support
+   - Optimized space usage and container size
+   - Added visual enhancements to description display
+
 ## Current Working Branch
 
-- Branch: main
+- Branch: main (with feature branch: feature/improved-descriptions)
 - Deployment: The app is deployed via GitHub Pages at https://ali-shabani.github.io/vibe-todo/
 
 ## Next Steps

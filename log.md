@@ -64,3 +64,17 @@
 - Modified edit functionality to allow editing descriptions
 - Ensured backward compatibility with existing todos (empty descriptions)
 - Enhanced styling to accommodate the new description field
+
+## Entry 6 - Improved Todo Descriptions
+
+**Date:** 2025-04-23
+**Time Spent:** 8 minutes
+**Changes:**
+
+- Changed description input from text field to textarea for more space
+- Enhanced description display with better formatting and styling
+- Always display description area (with placeholder text if empty)
+- Improved editing experience with proper textarea for descriptions
+- Added Ctrl+Enter shortcut to save while editing descriptions
+- Increased container width to better accommodate longer descriptions
+- Added visual styling to descriptions (background, padding, line-height)
