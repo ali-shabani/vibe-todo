@@ -1,7 +1,10 @@
 {
   "mcpServers": {
     "gitmcp": {
-      "url": "https://gitmcp.io/ali-shabani/todo-evolution"
+      "url": "https://gitmcp.io/ali-shabani/vibe-todo"
     }
-  }
+  },
+  "extensionId": "github",
+  "name": "ali-shabani/vibe-todo",
+  "url": "https://gitmcp.io/ali-shabani/vibe-todo"
 }
