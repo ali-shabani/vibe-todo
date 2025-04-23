@@ -170,3 +170,20 @@
 - Made shortcut indicators more noticeable while keeping them subtle
 - Improved visual hierarchy in the shortcut hints
 - Enhanced overall user experience with better discoverability
+
+## Entry 14 - Todo Action Logging and Trash System
+
+**Date:** 2025-04-24
+**Time Spent:** 35 minutes
+**Changes:**
+
+- Implemented soft deletion with a trash system for todos
+- Added a "Trash" tab to view and manage deleted todos
+- Created comprehensive action logging for all todo operations
+- Added ability to view detailed history of each todo
+- Implemented detailed view with activity log and timeline
+- Added restore functionality for deleted todos
+- Created permanent delete option for trash items
+- Added status badges to clearly show todo state
+- Enhanced UI with action-specific icons and styling
+- Improved overall tracking and management of todo lifecycle
