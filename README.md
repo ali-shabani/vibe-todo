@@ -4,7 +4,7 @@ A simple, clean todo application built with vanilla JavaScript, HTML, and CSS.
 
 ## Live Demo
 
-You can try out the application at: [https://ali-shabani.github.io/todo-evolution/](https://ali-shabani.github.io/todo-evolution/)
+You can try out the application at: [https://ali-shabani.github.io/vibe-todo/](https://ali-shabani.github.io/vibe-todo/)
 
 ## Features
 
